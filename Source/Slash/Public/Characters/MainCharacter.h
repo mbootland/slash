@@ -54,10 +54,19 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* DodgeAction;
 
+	void PlayAttackMontage();
+
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
+	bool CanAttack();
+
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	EActionState ActionState = EActionState::EAS_Unoccupied;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraBoom;

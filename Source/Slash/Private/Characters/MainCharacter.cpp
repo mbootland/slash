@@ -89,11 +89,25 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void AMainCharacter::Attack()
 {
+	if (CanAttack())
+	{
+		PlayAttackMontage();
+		ActionState = EActionState::EAS_Attacking;
+	}
+}
+
+bool AMainCharacter::CanAttack()
+{
+	return ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped;
+}
+
+void AMainCharacter::PlayAttackMontage()
+{
 	UAnimInstance *AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && AttackMontage)
 	{
 		AnimInstance->Montage_Play(AttackMontage);
-		int32 Selection = FMath::RandRange(0, 1);
+		const int32 Selection = FMath::RandRange(0, 2);
 		FName SectionName = FName();
 		switch (Selection)
 		{
@@ -103,14 +117,16 @@ void AMainCharacter::Attack()
 		case 1:
 			SectionName = FName("Attack2");
 			break;
-		case 2:
-			SectionName = FName("Attack3");
-			break;
 		default:
 			break;
 		}
 		AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
 	}
+}
+
+void AMainCharacter::AttackEnd()
+{
+	ActionState = EActionState::EAS_Unoccupied;
 }
 
 void AMainCharacter::Dodge()
