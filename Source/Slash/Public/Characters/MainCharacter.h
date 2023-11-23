@@ -13,6 +13,7 @@ class UInputAction;
 class USpringArmComponent;
 class UCameraComponent;
 class AItem;
+class UAnimMontage;
 
 UCLASS()
 class SLASH_API AMainCharacter : public ACharacter
@@ -66,4 +67,7 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly)
 	AItem *OverlappingItem;
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage *AttackMontage;
 };
