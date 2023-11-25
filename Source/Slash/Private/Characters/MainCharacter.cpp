@@ -46,7 +46,7 @@ void AMainCharacter::BeginPlay()
 
 void AMainCharacter::Move(const FInputActionValue& Value)
 {
-	if (ActionState == EActionState::EAS_Attacking) return;
+	if (ActionState != EActionState::EAS_Unoccupied) return;
 
 	const FVector2D MovementVector = Value.Get<FVector2D>();
 
@@ -165,20 +165,19 @@ void AMainCharacter::EKeyPressed()
 	}
 	else
 	{
-
+		if (CanUnequip())
 		{
-			if (CanUnequip())
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Unequip"));
-				PlayEquipMontage(FName("Unequip"));
-				CharacterState = ECharacterState::ECS_Unequipped;
-			}
-			else if (CanEquip())
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Equip"));
-				PlayEquipMontage(FName("Equip"));
-				CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
-			}
+			UE_LOG(LogTemp, Warning, TEXT("Unequip"));
+			PlayEquipMontage(FName("Unequip"));
+			CharacterState = ECharacterState::ECS_Unequipped;
+			ActionState = EActionState::EAS_EquippingWeapon;
+		}
+		else if (CanEquip())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Equip"));
+			PlayEquipMontage(FName("Equip"));
+			CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+			ActionState = EActionState::EAS_EquippingWeapon;
 		}
 	}
 
@@ -200,4 +199,28 @@ void AMainCharacter::PlayEquipMontage(FName SectionName)
 		AnimInstance->Montage_Play(EquipMontage);
 		AnimInstance->Montage_JumpToSection(SectionName, EquipMontage);
 	}
+}
+
+void AMainCharacter::Unequip()
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("SpineSocket"));
+		FinishEquipping();
+	}
+}
+
+void AMainCharacter::Equip()
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("RightHandSocket"));
+		FinishEquipping();
+	}
+}
+
+void AMainCharacter::FinishEquipping()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Finished Equipping"));
+	ActionState = EActionState::EAS_Unoccupied;
 }

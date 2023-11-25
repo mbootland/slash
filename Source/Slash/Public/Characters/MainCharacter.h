@@ -38,6 +38,15 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	EActionState ActionState = EActionState::EAS_Unoccupied;
 
+	UFUNCTION(BlueprintCallable)
+	void Unequip();
+
+	UFUNCTION(BlueprintCallable)
+	void Equip();
+
+	UFUNCTION(BlueprintCallable)
+	void FinishEquipping();
+
 protected:
 	virtual void BeginPlay() override;
 
