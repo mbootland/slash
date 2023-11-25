@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// BootSoft
 
 #pragma once
 
@@ -7,9 +7,6 @@
 #include "CharacterTypes.h"
 #include "SlashAnimInstance.generated.h"
 
-/**
- *
- */
 UCLASS()
 class SLASH_API USlashAnimInstance : public UAnimInstance
 {

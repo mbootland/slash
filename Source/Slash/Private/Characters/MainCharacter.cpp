@@ -89,6 +89,7 @@ void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	}
 }
 
+// Attack functions
 void AMainCharacter::Attack()
 {
 	if (CanAttack())
@@ -98,10 +99,31 @@ void AMainCharacter::Attack()
 	}
 }
 
+// Attack Checks
+void AMainCharacter::AttackEnd()
+{
+	ActionState = EActionState::EAS_Unoccupied;
+}
+
 bool AMainCharacter::CanAttack()
 {
 	return ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped;
 }
+
+bool AMainCharacter::CanUnequip()
+{
+	return ActionState == EActionState::EAS_Unoccupied &&
+		CharacterState != ECharacterState::ECS_Unequipped;
+}
+
+bool AMainCharacter::CanEquip()
+{
+	return ActionState == EActionState::EAS_Unoccupied &&
+		CharacterState == ECharacterState::ECS_Unequipped &&
+		EquippedWeapon;
+}
+
+// Attack Montages
 
 void AMainCharacter::PlayAttackMontage()
 {
@@ -123,17 +145,8 @@ void AMainCharacter::PlayAttackMontage()
 			break;
 		}
 		AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
+		AttackEnd();
 	}
-}
-
-void AMainCharacter::AttackEnd()
-{
-	ActionState = EActionState::EAS_Unoccupied;
-}
-
-void AMainCharacter::Dodge()
-{
-
 }
 
 void AMainCharacter::EKeyPressed()
@@ -141,8 +154,44 @@ void AMainCharacter::EKeyPressed()
 	AWeapon* OverlappingWeapon = Cast<AWeapon>(OverlappingItem);
 	if (OverlappingWeapon)
 	{
-		OverlappingWeapon->Equip(GetMesh(), FName("RightHandSocket"));
+		OverlappingWeapon->Pickup(GetMesh(), FName("RightHandSocket"));
 		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
 	}
+	else
+	{
+		if (ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped)
+		{
+			{
+				if (CanUnequip())
+				{
+					PlayEquipMontage(FName("Unequip"));
+					CharacterState = ECharacterState::ECS_Unequipped;
+				}
+				else if (CanEquip())
+				{
+					PlayEquipMontage(FName("Equip"));
+					CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+				}
+			}
+		}
+	}
 
+}
+
+
+// Other functions
+void AMainCharacter::Dodge()
+{
+
+}
+
+// Other montages
+void AMainCharacter::PlayEquipMontage(FName SectionName)
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && EquipMontage)
+	{
+		AnimInstance->Montage_Play(EquipMontage);
+		AnimInstance->Montage_JumpToSection(SectionName, EquipMontage);
+	}
 }
