@@ -23,6 +23,8 @@ class SLASH_API AItem : public AActor
 public:	
 	AItem();
 
+	UPROPERTY(VisibleAnywhere)
+	USphereComponent* Sphere;
 protected:
 	virtual void BeginPlay() override;
 
@@ -54,9 +56,6 @@ protected:
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float TimeConstant = 5.f;
-
-	UPROPERTY(VisibleAnywhere)
-	USphereComponent* Sphere;
 };
 
 template<typename T>
