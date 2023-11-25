@@ -81,6 +81,9 @@ protected:
 	void Look(const FInputActionValue& Value);
 private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+	float TimeSinceLastEKey = 0.0f;
+	const float EKeyCooldown = 0.1f;
+
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraBoom;
 

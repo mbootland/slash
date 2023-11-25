@@ -72,6 +72,10 @@ void AMainCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (TimeSinceLastEKey < EKeyCooldown)
+	{
+		TimeSinceLastEKey += DeltaTime;
+	}
 }
 
 void AMainCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -152,6 +156,13 @@ void AMainCharacter::PlayAttackMontage()
 
 void AMainCharacter::EKeyPressed()
 {
+	if (TimeSinceLastEKey < EKeyCooldown)
+	{
+		return;
+	}
+
+	TimeSinceLastEKey = 0.0f;
+
 	UE_LOG(LogTemp, Warning, TEXT("EKeyPressed Function Called"));
 	UE_LOG(LogTemp, Warning, TEXT("ActionState (0 unoccupied): %d, CharacterState (0 unequiped): %d"), (int32)ActionState, (int32)CharacterState);
 
