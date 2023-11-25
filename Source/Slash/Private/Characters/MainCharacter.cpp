@@ -206,7 +206,6 @@ void AMainCharacter::Unequip()
 	if (EquippedWeapon)
 	{
 		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("SpineSocket"));
-		FinishEquipping();
 	}
 }
 
@@ -215,7 +214,6 @@ void AMainCharacter::Equip()
 	if (EquippedWeapon)
 	{
 		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("RightHandSocket"));
-		FinishEquipping();
 	}
 }
 
