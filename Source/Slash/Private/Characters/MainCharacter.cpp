@@ -107,7 +107,8 @@ void AMainCharacter::AttackEnd()
 
 bool AMainCharacter::CanAttack()
 {
-	return ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped;
+	return ActionState == EActionState::EAS_Unoccupied && 
+		CharacterState != ECharacterState::ECS_Unequipped;
 }
 
 bool AMainCharacter::CanUnequip()
@@ -151,27 +152,32 @@ void AMainCharacter::PlayAttackMontage()
 
 void AMainCharacter::EKeyPressed()
 {
+	UE_LOG(LogTemp, Warning, TEXT("EKeyPressed Function Called"));
+	UE_LOG(LogTemp, Warning, TEXT("ActionState (0 unoccupied): %d, CharacterState (0 unequiped): %d"), (int32)ActionState, (int32)CharacterState);
+
 	AWeapon* OverlappingWeapon = Cast<AWeapon>(OverlappingItem);
 	if (OverlappingWeapon)
 	{
 		OverlappingWeapon->Pickup(GetMesh(), FName("RightHandSocket"));
 		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+		OverlappingItem = nullptr;
+		EquippedWeapon = OverlappingWeapon;
 	}
 	else
 	{
-		if (ActionState == EActionState::EAS_Unoccupied && CharacterState != ECharacterState::ECS_Unequipped)
+
 		{
+			if (CanUnequip())
 			{
-				if (CanUnequip())
-				{
-					PlayEquipMontage(FName("Unequip"));
-					CharacterState = ECharacterState::ECS_Unequipped;
-				}
-				else if (CanEquip())
-				{
-					PlayEquipMontage(FName("Equip"));
-					CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
-				}
+				UE_LOG(LogTemp, Warning, TEXT("Unequip"));
+				PlayEquipMontage(FName("Unequip"));
+				CharacterState = ECharacterState::ECS_Unequipped;
+			}
+			else if (CanEquip())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Equip"));
+				PlayEquipMontage(FName("Equip"));
+				CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
 			}
 		}
 	}
