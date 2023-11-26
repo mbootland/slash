@@ -7,6 +7,8 @@
 #include "Interfaces/HitInterface.h"
 #include "Enemy.generated.h"
 
+class UAnimMontage;
+
 UCLASS()
 class SLASH_API AEnemy : public ACharacter, public IHitInterface
 {
@@ -16,10 +18,16 @@ public:
 	// Sets default values for this character's properties
 	AEnemy();
 
+	/**
+	* Animation montages
+	*/
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* HitReactMontage;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void PlayHitReactMontage(const FName& SectionName);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

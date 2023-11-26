@@ -211,7 +211,7 @@ void AMainCharacter::Dodge()
 }
 
 // Other montages
-void AMainCharacter::PlayEquipMontage(FName SectionName)
+void AMainCharacter::PlayEquipMontage(const FName& SectionName)
 {
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && EquipMontage)
