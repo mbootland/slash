@@ -35,6 +35,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BoxTraceEnd;
+
+	FORCEINLINE UBoxComponent* GetWeaponBox() const { return WeaponBox; }
 protected:
 	virtual void BeginPlay() override;
 

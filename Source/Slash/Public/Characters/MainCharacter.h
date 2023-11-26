@@ -71,6 +71,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	UInputAction* DodgeAction;
 
+	UFUNCTION(BlueprintCallable)
+	void SetWeaponCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
+
 	void PlayAttackMontage();
 	bool CanAttack();
 	void PlayEquipMontage(FName SectionName);
