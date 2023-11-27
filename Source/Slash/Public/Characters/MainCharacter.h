@@ -85,7 +85,7 @@ protected:
 private:
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
 	float TimeSinceLastEKey = 0.0f;
-	const float EKeyCooldown = 0.5f;
+	const float EKeyCooldown = 0.2f;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* CameraBoom;
