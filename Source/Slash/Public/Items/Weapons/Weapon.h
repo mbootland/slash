@@ -36,6 +36,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* BoxTraceEnd;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void CreateFields(const FVector& FieldLocation);
+
 	FORCEINLINE UBoxComponent* GetWeaponBox() const { return WeaponBox; }
 
 	TArray<AActor*> IgnoreActors;
