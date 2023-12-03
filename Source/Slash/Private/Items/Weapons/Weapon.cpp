@@ -34,8 +34,10 @@ void AWeapon::BeginPlay()
 }
 
 
-void AWeapon::Pickup(USceneComponent* InParent, FName InSocketName)
+void AWeapon::Pickup(USceneComponent* InParent, FName InSocketName, AActor* NewOwner, APawn* NewInstigator)
 {
+	SetOwner(NewOwner);
+	SetInstigator(NewInstigator);
 	AttachMeshToSocket(InParent, InSocketName);
 	ItemState = EItemState::EIS_PickedUp;
 
@@ -111,4 +113,12 @@ void AWeapon::OnBoxOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Oth
 	}
 
 	CreateFields(BoxHit.ImpactPoint);
+
+	UGameplayStatics::ApplyDamage(
+		BoxHit.GetActor(),
+		Damage,
+		GetInstigator()->GetController(),
+		this,
+		UDamageType::StaticClass()
+	);
 }
