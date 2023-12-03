@@ -38,11 +38,15 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UHealthBarComponent* HealthBarWidget;
 
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UAnimMontage* DeathMontage;
+
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void Die();
 	void PlayHitReactMontage(const FName& SectionName);
 public:	
 	// Called every frame
