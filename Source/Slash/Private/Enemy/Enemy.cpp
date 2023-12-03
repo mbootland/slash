@@ -93,7 +93,7 @@ void AEnemy::Die()
 	{
 		AnimInstance->Montage_Play(DeathMontage);
 
-		const int32 Selection = FMath::RandRange(0, 5);
+		const int32 Selection = FMath::RandRange(0, 3);
 		FName SectionName = FName();
 		switch (Selection)
 		{
